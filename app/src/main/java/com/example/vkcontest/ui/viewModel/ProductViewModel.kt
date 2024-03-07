@@ -14,7 +14,7 @@ class ProductViewModel() : ViewModel() {
     var listOfCategories = MutableStateFlow(value = listOf(""))
     private var skip = mutableStateOf(0)
     private var limit = mutableStateOf(20)
-    private var category = mutableStateOf("")
+    private var category = mutableStateOf("1")
 
     init {
         getAllCategories()
@@ -32,7 +32,7 @@ class ProductViewModel() : ViewModel() {
                     Retrofit.api.fetchProducts(limit.value, skip.value)
                 } else {
                     Retrofit.api.fetchProductsByCategory(
-                        category.value
+                        category.value,limit.value, skip.value
                     )
                 }
 
@@ -76,6 +76,7 @@ class ProductViewModel() : ViewModel() {
 
     fun selectCategory(_category: String) {
         category.value = _category
+        skip.value=0
         Log.d("category", category.value)
         fetchProducts()
     }

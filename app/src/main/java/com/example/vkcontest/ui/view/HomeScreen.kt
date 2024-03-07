@@ -3,7 +3,6 @@
 package com.example.vkcontest.ui.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,13 +41,13 @@ fun homeScreen(productViewModel: ProductViewModel) {
 
     ) {
 
-        LazyRow(modifier =Modifier.padding(8.dp)){
-            item{
+        LazyRow(modifier = Modifier.padding(8.dp)) {
+            item {
                 Button(onClick = { productViewModel.selectCategory("") }) {
-                     Text(text = "close")
+                    Text(text = "close")
                 }
             }
-            items(categoryList){
+            items(categoryList) {
                 Button(onClick = { productViewModel.selectCategory(it) }) {
                     Text(text = it)
                 }
@@ -65,26 +64,27 @@ fun homeScreen(productViewModel: ProductViewModel) {
                 productCard(it)
             }
         }
+        if (productList.total > 20)
+            Row(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
 
-        Row(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Button(onClick = {
-                productViewModel.prevPage()
-            }) {
-                Text(text = "Prev")
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(onClick = {
+                    productViewModel.prevPage()
+                }) {
+                    Text(text = "Prev")
+                }
+                Text(text = "Total: ${productList.total}")
+                Button(onClick = {
+                    productViewModel.nextPage()
+                }) {
+                    Text(text = "Next")
+                }
             }
-            Text(text = "Total: ${productList.total}")
-            Button(onClick = {
-                productViewModel.nextPage()
-            }) {
-                Text(text = "Next")
-            }
-        }
     }
 }
 
