@@ -1,13 +1,25 @@
 package com.example.vkcontest.data.api
 
-import android.telecom.Call
-import com.example.vkcontest.data.model.Product
 import com.example.vkcontest.data.model.Products
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ProductApi {
     @GET("products")
-    fun fetchProducts(@Query("limit") limit: Int, @Query("skip") skip: Int, @Query("select") select: String = "title,price,description,thumbnail"): Products
+    suspend fun fetchProducts(
+        @Query("limit") limit: Int,
+        @Query("skip") skip: Int,
+        @Query("select") select: String = "title,description,thumbnail"
+    ): Products
 
+    @GET("products/categories")
+    suspend fun getAllCategories(): List<String>
+
+
+    @GET("products/{category}")
+    suspend fun fetchProductsByCategory(
+        @Path("category") category: String,
+        @Query("select") select: String = "title,description,thumbnail"
+    ): Products
 }
