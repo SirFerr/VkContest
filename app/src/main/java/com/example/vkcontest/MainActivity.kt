@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.example.vkcontest.data.Retrofit
 import com.example.vkcontest.ui.theme.VkContestTheme
 import com.example.vkcontest.ui.view.homeScreen
 import com.example.vkcontest.ui.viewModel.ProductViewModel

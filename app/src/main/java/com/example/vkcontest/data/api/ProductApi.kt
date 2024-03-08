@@ -1,5 +1,6 @@
 package com.example.vkcontest.data.api
 
+import com.example.vkcontest.data.model.Product
 import com.example.vkcontest.data.model.Products
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -23,5 +24,10 @@ interface ProductApi {
         @Query("limit") limit: Int,
         @Query("skip") skip: Int,
         @Query("select") select: String = "title,description,thumbnail"
+    ): Products
+
+    @GET("products/search")
+    suspend fun searchProduct(
+        @Query("q") text: String
     ): Products
 }

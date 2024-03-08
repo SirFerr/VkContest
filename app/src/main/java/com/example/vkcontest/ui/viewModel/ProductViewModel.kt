@@ -1,6 +1,7 @@
 package com.example.vkcontest.ui.viewModel
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,24 +18,23 @@ class ProductViewModel() : ViewModel() {
     private var category = mutableStateOf("1")
 
     init {
-        getAllCategories()
         fetchProducts()
-
+        getAllCategories()
     }
 
     private fun fetchProducts() {
-        Log.d("1",category.value)
+        Log.d("1", category.value)
         viewModelScope.launch {
 
             try {
-                 products.value =
+                products.value =
                     if (category.value !in listOfCategories.value) {
-                    Retrofit.api.fetchProducts(limit.value, skip.value)
-                } else {
-                    Retrofit.api.fetchProductsByCategory(
-                        category.value,limit.value, skip.value
-                    )
-                }
+                        Retrofit.api.fetchProducts(limit.value, skip.value)
+                    } else {
+                        Retrofit.api.fetchProductsByCategory(
+                            category.value, limit.value, skip.value
+                        )
+                    }
 
                 Log.d("debug", products.value.toString())
             } catch (e: Exception) {
@@ -74,11 +74,35 @@ class ProductViewModel() : ViewModel() {
         fetchProducts()
     }
 
-    fun selectCategory(_category: String) {
+    fun selectCategory(_category: String = "1") {
         category.value = _category
-        skip.value=0
+        skip.value = 0
         Log.d("category", category.value)
         fetchProducts()
     }
+
+    fun getCategory(): MutableState<String> {
+        return category
+    }
+
+    fun getCurrentPageNum(): String {
+        return " ${products.value.skip}-${products.value.skip + products.value.limit} из ${products.value.total}"
+    }
+
+    fun search(text: String) {
+        viewModelScope.launch {
+            try {
+                products.value =
+
+                    Retrofit.api.searchProduct(text)
+
+
+                Log.d("debug", products.value.toString())
+            } catch (e: Exception) {
+
+            }
+        }
+    }
 }
+
 
