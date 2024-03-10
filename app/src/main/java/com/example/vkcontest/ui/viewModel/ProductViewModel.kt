@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class ProductViewModel() : ViewModel() {
     var products = MutableStateFlow(Products(1, listOf(), 1, 1))
-    var listOfCategories = MutableStateFlow(value = listOf(""))
+    var listOfCategories = MutableStateFlow(value = emptyList<String>())
     private var skip = mutableStateOf(0)
     private var limit = mutableStateOf(20)
     private var category = mutableStateOf("1")
@@ -102,6 +102,11 @@ class ProductViewModel() : ViewModel() {
 
             }
         }
+    }
+
+    fun refresh() {
+        fetchProducts()
+        getAllCategories()
     }
 }
 

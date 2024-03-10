@@ -3,11 +3,8 @@ package com.example.vkcontest.ui.view
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
@@ -28,7 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.example.vkcontest.data.model.Product
 import com.example.vkcontest.ui.viewModel.ProductViewModel
 
 
@@ -50,7 +47,8 @@ fun homeScreen(productViewModel: ProductViewModel) {
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
             .padding(8.dp),
-        verticalArrangement = Arrangement.SpaceBetween
+        verticalArrangement = Arrangement.SpaceEvenly,
+        horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
 
@@ -64,7 +62,7 @@ fun homeScreen(productViewModel: ProductViewModel) {
                             productViewModel.selectCategory()
                             searchExtended = false
                         }) {
-                        Text(text = "close")
+                        Text(text = "Close")
                     }
                 }
             if (!searchExtended && productViewModel.getCategory().value == "1")
@@ -91,44 +89,51 @@ fun homeScreen(productViewModel: ProductViewModel) {
             ) {
                 TextField(
                     value = searchText,
-                    onValueChange = { searchText = it
-                        productViewModel.search(searchText) },
+                    onValueChange = {
+                        searchText = it
+                        productViewModel.search(searchText)
+                    },
                     modifier = Modifier.fillMaxSize()
-                    )
+                )
             }
 
-
-        LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Fixed(2),
-            modifier = Modifier
-                .weight(1f),
-        ) {
-
-            items(productList.products) {
-                productCard(it)
+        if (productList.products == emptyList<Product>()) {
+            Button(onClick = { productViewModel.refresh() }) {
+                Text("Refresh")
             }
-        }
-        if (productList.total > 20)
-            Row(
+        } else {
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Fixed(2),
                 modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxSize(),
-
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
+                    .weight(1f),
             ) {
-                Button(onClick = {
-                    productViewModel.prevPage()
-                }) {
-                    Text(text = "Prev")
-                }
-                Text(text = productViewModel.getCurrentPageNum())
-                Button(onClick = {
-                    productViewModel.nextPage()
-                }) {
-                    Text(text = "Next")
+
+                items(productList.products) {
+                    productCard(it)
                 }
             }
+            if (productList.total > 20)
+                Row(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxSize(),
+
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(onClick = {
+                        productViewModel.prevPage()
+                    }) {
+                        Text(text = "Prev")
+                    }
+                    Text(text = productViewModel.getCurrentPageNum())
+                    Button(onClick = {
+                        productViewModel.nextPage()
+                    }) {
+                        Text(text = "Next")
+                    }
+                }
+        }
     }
 }
 
