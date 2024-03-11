@@ -112,7 +112,7 @@ fun homeScreen(productViewModel: ProductViewModel) {
                     productCard(it)
                 }
             }
-            if (productList.total > 20)
+            if (productList.total > 20 && !searchExtended)
                 Row(
                     modifier = Modifier
                         .padding(8.dp)
