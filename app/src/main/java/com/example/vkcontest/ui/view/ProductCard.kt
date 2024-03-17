@@ -24,7 +24,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.vkcontest.data.model.Product
@@ -37,7 +36,7 @@ import com.example.vkcontest.data.model.Product
 //}
 
 @Composable
-fun productCard(product: Product? = Product(),navController: NavHostController) {
+fun productCard(product: Product? = null, navController: NavHostController) {
     var imageURL by remember {
         mutableStateOf(product?.thumbnail.toString())
     }
@@ -65,7 +64,7 @@ fun productCard(product: Product? = Product(),navController: NavHostController) 
 
         ) {
             Image(
-                painter = rememberAsyncImagePainter(imageURL),
+                painter = rememberAsyncImagePainter(product?.thumbnail.toString()),
                 contentDescription = null,
                 modifier = Modifier
                     .aspectRatio(1f)
@@ -74,9 +73,9 @@ fun productCard(product: Product? = Product(),navController: NavHostController) 
 
             )
             Spacer(modifier = Modifier.size(8.dp))
-            Text(text = title, modifier = Modifier, textAlign = TextAlign.Center)
+            Text(text = product?.title.toString(), modifier = Modifier, textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.size(8.dp))
-            Text(text = description, modifier = Modifier, fontSize = 14.sp)
+            Text(text = product?.description.toString(), modifier = Modifier, fontSize = 14.sp)
         }
     }
 }
