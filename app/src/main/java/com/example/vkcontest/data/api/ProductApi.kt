@@ -11,8 +11,13 @@ interface ProductApi {
     suspend fun fetchProducts(
         @Query("limit") limit: Int,
         @Query("skip") skip: Int,
-        @Query("select") select: String = "title,description,thumbnail"
+        @Query("select") select: String = "title,description,thumbnail,id"
     ): Products
+
+    @GET("products/{id}")
+    suspend fun getById(
+        @Path("id") id: Int,
+    ): Product
 
     @GET("products/categories")
     suspend fun getAllCategories(): List<String>
@@ -23,7 +28,7 @@ interface ProductApi {
         @Path("category") category: String,
         @Query("limit") limit: Int,
         @Query("skip") skip: Int,
-        @Query("select") select: String = "title,description,thumbnail"
+        @Query("select") select: String = "title,description,thumbnail,id"
     ): Products
 
     @GET("products/search")

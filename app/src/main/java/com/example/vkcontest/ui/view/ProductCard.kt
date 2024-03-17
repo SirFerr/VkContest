@@ -20,9 +20,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.vkcontest.data.model.Product
 
@@ -34,26 +37,23 @@ import com.example.vkcontest.data.model.Product
 //}
 
 @Composable
-fun productCard(product: Product? = null) {
+fun productCard(product: Product? = Product(),navController: NavHostController) {
     var imageURL by remember {
-        mutableStateOf("")
+        mutableStateOf(product?.thumbnail.toString())
     }
     var description by remember {
-        mutableStateOf("")
+        mutableStateOf(product?.description.toString())
     }
     var title by remember {
-        mutableStateOf("")
+        mutableStateOf(product?.title.toString())
     }
-    imageURL = product?.thumbnail.toString()
-    title = product?.title.toString()
-    description = product?.description.toString()
 
     Card(
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp)
             .clickable {
-
+                navController.navigate("productScreen/${product?.id}")
             }
     ) {
         Column(
@@ -70,7 +70,7 @@ fun productCard(product: Product? = null) {
                 modifier = Modifier
                     .aspectRatio(1f)
                     .clip(RoundedCornerShape(10.dp)),
-//                contentScale = ContentScale.Fit
+                contentScale = ContentScale.Crop
 
             )
             Spacer(modifier = Modifier.size(8.dp))

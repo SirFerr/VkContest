@@ -6,9 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vkcontest.data.Retrofit
+import com.example.vkcontest.data.model.Product
 import com.example.vkcontest.data.model.Products
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ProductViewModel() : ViewModel() {
     var products = MutableStateFlow(Products(1, listOf(), 1, 1))
@@ -42,6 +45,17 @@ class ProductViewModel() : ViewModel() {
             }
         }
     }
+
+    suspend fun getById(id:Int): Product? {
+        return withContext(Dispatchers.IO) {
+            try {
+                return@withContext Retrofit.api.getById(id)
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+
 
     private fun getAllCategories() {
         viewModelScope.launch {

@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.vkcontest.data.Retrofit
 import com.example.vkcontest.ui.theme.VkContestTheme
 import com.example.vkcontest.ui.view.homeScreen
+import com.example.vkcontest.ui.view.navigation
 import com.example.vkcontest.ui.viewModel.ProductViewModel
 
 class MainActivity : ComponentActivity() {
@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val productViewModel: ProductViewModel by viewModels()
-                    homeScreen(productViewModel)
+                    navigation(productViewModel)
 
                 }
             }

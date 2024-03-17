@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.vkcontest.data.model.Product
 import com.example.vkcontest.ui.viewModel.ProductViewModel
 
@@ -32,7 +33,7 @@ import com.example.vkcontest.ui.viewModel.ProductViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
-fun homeScreen(productViewModel: ProductViewModel) {
+fun homeScreen(productViewModel: ProductViewModel, navController: NavHostController) {
     val productList by productViewModel.products.collectAsState()
     val categoryList by productViewModel.listOfCategories.collectAsState()
     var searchExtended by remember {
@@ -109,7 +110,7 @@ fun homeScreen(productViewModel: ProductViewModel) {
             ) {
 
                 items(productList.products) {
-                    productCard(it)
+                    productCard(it,navController)
                 }
             }
             if (productList.total > 20 && !searchExtended)
