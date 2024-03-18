@@ -25,13 +25,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.vkcontest.data.model.Product
 import com.example.vkcontest.ui.viewModel.ProductViewModel
+import javax.inject.Inject
 
 @Composable
-fun productScreen(id: Int, productViewModel: ProductViewModel) {
+fun productScreen(id: Int, productViewModel: ProductViewModel = hiltViewModel()) {
     var product by remember { mutableStateOf<Product?>(null) }
+
+   
 
     LaunchedEffect(id) {
         product = productViewModel.getById(id)
@@ -79,7 +83,7 @@ fun productScreen(id: Int, productViewModel: ProductViewModel) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "cost: "+product!!.price.toString())
+                Text(text = "cost: " + product!!.price.toString())
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center

@@ -6,19 +6,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.vkcontest.ui.viewModel.ProductViewModel
 
 @Composable
-fun navigation(productViewModel: ProductViewModel) {
+fun navigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "homeScreen") {
         composable("homeScreen") {
-            homeScreen(productViewModel = productViewModel, navController)
+            homeScreen(navController)
         }
         composable("productScreen/{id}", listOf(navArgument("id") {
             type = NavType.IntType
         })) { navBackStackEntry ->
-            navBackStackEntry.arguments?.getInt("id")?.let { productScreen(it, productViewModel) }
+            navBackStackEntry.arguments?.getInt("id")?.let { productScreen(it) }
 
         }
     }

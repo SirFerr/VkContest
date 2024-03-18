@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.vkcontest.data.model.Product
 import com.example.vkcontest.ui.viewModel.ProductViewModel
@@ -33,7 +34,9 @@ import com.example.vkcontest.ui.viewModel.ProductViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
-fun homeScreen(productViewModel: ProductViewModel, navController: NavHostController) {
+fun homeScreen(
+    navController: NavHostController, productViewModel: ProductViewModel = hiltViewModel()
+) {
     val productList by productViewModel.products.collectAsState()
     val categoryList by productViewModel.listOfCategories.collectAsState()
     var searchExtended by remember {
@@ -55,48 +58,38 @@ fun homeScreen(productViewModel: ProductViewModel, navController: NavHostControl
 
 
         LazyRow(modifier = Modifier) {
-            if (productViewModel.getCategory().value != "1" || searchExtended)
-                item {
-                    Button(
-                        modifier = Modifier.padding(8.dp),
-                        onClick = {
-                            productViewModel.selectCategory()
-                            searchExtended = false
-                        }) {
-                        Text(text = "Close")
-                    }
+            if (productViewModel.getCategory().value != "1" || searchExtended) item {
+                Button(modifier = Modifier.padding(8.dp), onClick = {
+                    productViewModel.selectCategory()
+                    searchExtended = false
+                }) {
+                    Text(text = "Close")
                 }
-            if (!searchExtended && productViewModel.getCategory().value == "1")
-                item {
-                    Button(
-                        modifier = Modifier.padding(8.dp),
-                        onClick = { searchExtended = true }) {
-                        Text(text = "Search")
-                    }
+            }
+            if (!searchExtended && productViewModel.getCategory().value == "1") item {
+                Button(modifier = Modifier.padding(8.dp), onClick = { searchExtended = true }) {
+                    Text(text = "Search")
                 }
+            }
             items(categoryList) {
-                Button(
-                    modifier = Modifier.padding(8.dp),
+                Button(modifier = Modifier.padding(8.dp),
                     onClick = { productViewModel.selectCategory(it) }) {
                     Text(text = it)
                 }
             }
         }
-        if (searchExtended)
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                TextField(
-                    value = searchText,
-                    onValueChange = {
-                        searchText = it
-                        productViewModel.search(searchText)
-                    },
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
+        if (searchExtended) Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            TextField(
+                value = searchText, onValueChange = {
+                    searchText = it
+                    productViewModel.search(searchText)
+                }, modifier = Modifier.fillMaxSize()
+            )
+        }
 
         if (productList.products == emptyList<Product>()) {
             Button(onClick = { productViewModel.refresh() }) {
@@ -105,35 +98,33 @@ fun homeScreen(productViewModel: ProductViewModel, navController: NavHostControl
         } else {
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Fixed(2),
-                modifier = Modifier
-                    .weight(1f),
+                modifier = Modifier.weight(1f),
             ) {
 
                 items(productList.products) {
-                    productCard(it,navController)
+                    productCard(it, navController)
                 }
             }
-            if (productList.total > 20 && !searchExtended)
-                Row(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxSize(),
+            if (productList.total > 20 && !searchExtended) Row(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxSize(),
 
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Button(onClick = {
-                        productViewModel.prevPage()
-                    }) {
-                        Text(text = "Prev")
-                    }
-                    Text(text = productViewModel.getCurrentPageNum())
-                    Button(onClick = {
-                        productViewModel.nextPage()
-                    }) {
-                        Text(text = "Next")
-                    }
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(onClick = {
+                    productViewModel.prevPage()
+                }) {
+                    Text(text = "Prev")
                 }
+                Text(text = productViewModel.getCurrentPageNum())
+                Button(onClick = {
+                    productViewModel.nextPage()
+                }) {
+                    Text(text = "Next")
+                }
+            }
         }
     }
 }

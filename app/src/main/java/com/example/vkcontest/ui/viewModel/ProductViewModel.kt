@@ -8,12 +8,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.vkcontest.data.Retrofit
 import com.example.vkcontest.data.model.Product
 import com.example.vkcontest.data.model.Products
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ProductViewModel() : ViewModel() {
+@HiltViewModel
+class ProductViewModel @Inject constructor() : ViewModel() {
     var products = MutableStateFlow(Products(1, listOf(), 1, 1))
     var listOfCategories = MutableStateFlow(value = emptyList<String>())
     private var skip = mutableStateOf(0)
@@ -46,7 +49,7 @@ class ProductViewModel() : ViewModel() {
         }
     }
 
-    suspend fun getById(id:Int): Product? {
+    suspend fun getById(id: Int): Product? {
         return withContext(Dispatchers.IO) {
             try {
                 return@withContext Retrofit.api.getById(id)
